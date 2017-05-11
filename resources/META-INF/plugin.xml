@@ -29,6 +29,10 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <codeInsight.template.postfixTemplateProvider language="JAVA" implementationClass="com.vdoc.intellij.postfix.completion.VDocPostfixTemplateProvider"/>
+
+    <!-- configuration type to run moovapps-process -->
+    <configurationType implementation="com.vdoc.intellij.run.VDocRunConfigurationType" />
+
   </extensions>
 
   <actions>
