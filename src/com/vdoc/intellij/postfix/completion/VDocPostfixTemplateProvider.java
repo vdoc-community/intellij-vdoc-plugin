@@ -3,7 +3,6 @@ package com.vdoc.intellij.postfix.completion;
 import com.intellij.codeInsight.template.postfix.templates.JavaPostfixTemplateProvider;
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate;
 import com.intellij.util.containers.ContainerUtil;
-import com.vdoc.intellij.postfix.completion.template.ModuleTemplate;
 import com.vdoc.intellij.postfix.completion.template.ProtocolUriTemplate;
 import com.vdoc.intellij.postfix.completion.template.TransactionTemplate;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +18,7 @@ public class VDocPostfixTemplateProvider extends JavaPostfixTemplateProvider
 
 		public VDocPostfixTemplateProvider()
 		{
-				templates = ContainerUtil.<PostfixTemplate>newHashSet(new ModuleTemplate(), new ProtocolUriTemplate(), new TransactionTemplate());
+				templates = ContainerUtil.<PostfixTemplate>newHashSet(new ProtocolUriTemplate(), new TransactionTemplate());
 		}
 
 		@NotNull
