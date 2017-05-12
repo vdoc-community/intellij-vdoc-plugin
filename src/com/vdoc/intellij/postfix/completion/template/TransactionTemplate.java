@@ -44,7 +44,7 @@ public class TransactionTemplate extends VDocPostfixTemplateWithExpressionSelect
 				document.deleteString(expression.getTextRange().getStartOffset(), expression.getTextRange().getEndOffset());
 				final TemplateManager manager = TemplateManager.getInstance(project);
 
-				String templateString = "$expr$.beginTransaction();try{$END$$expr$.commitTransaction();}catch(com.axemble.vdoc.sdk.exceptions.ModuleException e){LOG.error(e);}finally{if ($expr$.isTransactionActive()){$expr$.rollbackTransaction();}}";
+				String templateString = "$expr$.beginTransaction();try{\n$END$\n$expr$.commitTransaction();}catch(com.axemble.vdoc.sdk.exceptions.ModuleException e){LOG.error(e);}finally{if ($expr$.isTransactionActive()){$expr$.rollbackTransaction();}}";
 
 				Template template = createTemplate(project, manager, templateString);
 
