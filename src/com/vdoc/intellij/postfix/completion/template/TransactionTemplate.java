@@ -12,26 +12,26 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Created by famaridon on 07/07/2016.
+ * Created by wtoscer on 03/08/2016.
  */
-public class ModuleTemplate extends VDocPostfixTemplateWithExpressionSelector
+public class TransactionTemplate extends VDocPostfixTemplateWithExpressionSelector
 {
-		public ModuleTemplate()
+		public TransactionTemplate()
 		{
-				this("module");
+				this("transaction");
 		}
 
-		public ModuleTemplate(@NotNull String alias)
+		public TransactionTemplate(@NotNull String alias)
 		{
-				super(alias, "toto", JavaPostfixTemplatesUtils.selectorAllExpressionsWithCurrentOffset(IS_MODULE));
+				super(alias, "manage transaction", JavaPostfixTemplatesUtils.selectorAllExpressionsWithCurrentOffset(IS_MODULE));
 		}
 
-		protected ModuleTemplate(@NotNull String name, @NotNull String key, @NotNull String example, @NotNull PostfixTemplateExpressionSelector selector)
+		protected TransactionTemplate(@NotNull String name, @NotNull String key, @NotNull String example, @NotNull PostfixTemplateExpressionSelector selector)
 		{
 				super(name, key, example, selector);
 		}
 
-		protected ModuleTemplate(@NotNull String name, @NotNull String example, @NotNull PostfixTemplateExpressionSelector selector)
+		protected TransactionTemplate(@NotNull String name, @NotNull String example, @NotNull PostfixTemplateExpressionSelector selector)
 		{
 				super(name, example, selector);
 		}
@@ -41,10 +41,10 @@ public class ModuleTemplate extends VDocPostfixTemplateWithExpressionSelector
 		{
 				Project project = expression.getProject();
 				Document document = editor.getDocument();
-				//document.deleteString(expression.getTextRange().getStartOffset(), expression.getTextRange().getEndOffset());
+				document.deleteString(expression.getTextRange().getStartOffset(), expression.getTextRange().getEndOffset());
 				final TemplateManager manager = TemplateManager.getInstance(project);
 
-				String templateString = "try{}catch(com.axemble.vdoc.sdk.exceptions.ModuleException e){//todo}";
+				String templateString = "$expr$.beginTransaction();try{$END$$expr$.commitTransaction();}catch(com.axemble.vdoc.sdk.exceptions.ModuleException e){LOG.error(e);}finally{if ($expr$.isTransactionActive()){$expr$.rollbackTransaction();}}";
 
 				Template template = createTemplate(project, manager, templateString);
 
