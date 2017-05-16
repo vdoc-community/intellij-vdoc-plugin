@@ -32,7 +32,7 @@ public class VDocRunConfigurationType implements ConfigurationType
 	@Override
 	public String getDisplayName()
 	{
-		return "VDoc";
+		return "Process";
 	}
 	
 	/**
