@@ -1,5 +1,7 @@
+import java.util.Collection;
+
 public class Foo {
-  void m(Object o) {
-    <spot>o</spot>$key
+  void m(Collection c) {
+    <spot>c</spot>$key
   }
 }
