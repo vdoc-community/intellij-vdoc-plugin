@@ -3,9 +3,9 @@ package com.vdoc.intellij.run.configuration;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
+import com.intellij.execution.application.ApplicationConfiguration;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.RunProfileState;
 import com.intellij.execution.configurations.RuntimeConfigurationError;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
@@ -17,12 +17,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.vdoc.intellij.run.ui.VDocConfigurable;
-import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.StringUtils;
-import org.jdom.Document;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,15 +27,27 @@ import java.nio.file.Paths;
 /**
  * Created by famaridon on 11/05/17.
  */
-public class VDoc14RunConfiguration extends RunConfigurationBase {
+public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	private final Project project;
-	private Path vdocHome;
 	private final VDocConfigurable configurable;
+	private Path vdocHome;
+	private String xmx;
+	private String maxPermSize;
 	
 	public VDoc14RunConfiguration(Project project, ConfigurationFactory configurationFactory) {
-		super(project, configurationFactory, "VDoc14+");
+		super("VDoc14+", project, configurationFactory);
 		this.project = project;
 		this.configurable = new VDocConfigurable();
+	}
+	
+	@Override
+	public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
+		MAIN_CLASS_NAME = "org.jboss.Main";
+		VM_PARAMETERS = "-classpath \"" + vdocHome + "\\JBoss\\bin\\run.jar\" -server -Xmx" + xmx + " -XX:MaxPermSize=" + maxPermSize + "";
+		PROGRAM_PARAMETERS = "-c all -b 0.0.0.0";
+		WORKING_DIRECTORY = "D:\\developements\\process\\process-addon\\moovapps-workplace";
+		
+		return super.getState(executor, env);
 	}
 	
 	/**
@@ -70,6 +79,43 @@ public class VDoc14RunConfiguration extends RunConfigurationBase {
 	public void checkConfiguration() throws RuntimeConfigurationException {
 	}
 	
+	@Override
+	public void readExternal(Element element) throws InvalidDataException {
+		super.readExternal(element);
+		Element home = element.getChild("vdocHome");
+		if (home != null && StringUtils.isNotEmpty(home.getText())) {
+			this.vdocHome = Paths.get(home.getText());
+		}
+		Element xmx = element.getChild("xmx");
+		if (xmx != null && StringUtils.isNotEmpty(xmx.getText())) {
+			this.xmx = xmx.getText();
+		}
+		Element maxPermSize = element.getChild("maxPermSize");
+		if (maxPermSize != null && StringUtils.isNotEmpty(maxPermSize.getText())) {
+			this.maxPermSize = maxPermSize.getText();
+		}
+	}
+	
+	@Override
+	public void writeExternal(Element element) throws WriteExternalException {
+		super.writeExternal(element);
+		if (this.vdocHome != null) {
+			Element home = new Element("vdocHome");
+			home.setText(this.vdocHome.toString());
+			element.addContent(home);
+		}
+		if (this.xmx != null) {
+			Element xmx = new Element("xmx");
+			xmx.setText(this.xmx);
+			element.addContent(xmx);
+		}
+		if (this.maxPermSize != null) {
+			Element maxPermSize = new Element("maxPermSize");
+			maxPermSize.setText(this.maxPermSize);
+			element.addContent(maxPermSize);
+		}
+	}
+	
 	/**
 	 * get {@link VDoc14RunConfiguration#vdocHome} property
 	 *
@@ -89,34 +135,38 @@ public class VDoc14RunConfiguration extends RunConfigurationBase {
 	}
 	
 	/**
-	 * Prepares for executing a specific instance of the run configuration.
+	 * get {@link VDoc14RunConfiguration#xmx} property
 	 *
-	 * @param executor    the execution mode selected by the user (run, debug, profile etc.)
-	 * @param environment the environment object containing additional settings for executing the configuration.
-	 * @return the RunProfileState describing the process which is about to be started, or null if it's impossible to start the process.
-	 */
-	@Nullable
-	@Override
-	public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment environment) throws ExecutionException {
-		throw new NotImplementedException();
+	 * @return get the xmx property
+	 **/
+	public String getXmx() {
+		return xmx;
 	}
 	
-	@Override
-	public void writeExternal(Element element) throws WriteExternalException {
-		super.writeExternal(element);
-		if(this.vdocHome != null) {
-			Element home = new Element("vdocHome");
-			home.setText(this.vdocHome.toString());
-			element.addContent(home);
-		}
+	/**
+	 * set {@link VDoc14RunConfiguration#xmx} property
+	 *
+	 * @param xmx set the xmx property
+	 **/
+	public void setXmx(String xmx) {
+		this.xmx = xmx;
 	}
 	
-	@Override
-	public void readExternal(Element element) throws InvalidDataException {
-		super.readExternal(element);
-		Element home = element.getChild("vdocHome");
-		if(home != null && StringUtils.isNotEmpty(home.getText())) {
-			this.vdocHome = Paths.get(home.getText());
-		}
+	/**
+	 * get {@link VDoc14RunConfiguration#maxPermSize} property
+	 *
+	 * @return get the maxPermSize property
+	 **/
+	public String getMaxPermSize() {
+		return maxPermSize;
+	}
+	
+	/**
+	 * set {@link VDoc14RunConfiguration#maxPermSize} property
+	 *
+	 * @param maxPermSize set the maxPermSize property
+	 **/
+	public void setMaxPermSize(String maxPermSize) {
+		this.maxPermSize = maxPermSize;
 	}
 }
