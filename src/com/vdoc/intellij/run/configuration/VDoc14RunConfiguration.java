@@ -45,7 +45,7 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 		MAIN_CLASS_NAME = "org.jboss.Main";
 		VM_PARAMETERS = "-classpath \"" + vdocHome + "\\JBoss\\bin\\run.jar\" -server -Xmx" + xmx + " -XX:MaxPermSize=" + maxPermSize + "";
 		PROGRAM_PARAMETERS = "-c all -b 0.0.0.0";
-		WORKING_DIRECTORY = "D:\\developements\\process\\process-addon\\moovapps-workplace";
+		WORKING_DIRECTORY = vdocHome.toString();
 		
 		return super.getState(executor, env);
 	}
