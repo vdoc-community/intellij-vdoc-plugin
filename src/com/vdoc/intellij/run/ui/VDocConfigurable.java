@@ -3,10 +3,9 @@ package com.vdoc.intellij.run.ui;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
-import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.vdoc.intellij.bundle.VdocExecutionBundle;
 import com.vdoc.intellij.run.configuration.VDoc14RunConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -66,7 +65,7 @@ public class VDocConfigurable extends SettingsEditor<VDoc14RunConfiguration> {
 		browseButton = new TextFieldWithBrowseButton(vdocHome);
 		browseButton.addBrowseFolderListener(new TextBrowseFolderListener(new FileChooserDescriptor(false, true, false, false, false, false)));
 		
-		vdocHomeLabel = new JLabel("vdocHome");
+		vdocHomeLabel = new JLabel(VdocExecutionBundle.message("vdoc.run.vdoc.home"));
 		vdocHomeLabel.setLabelFor(vdocHome);
 		xmxLabel = new JLabel("xmx");
 		xmxLabel.setLabelFor(xmx);
