@@ -43,7 +43,7 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	@Override
 	public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
 		setMainClassName("org.jboss.Main");
-		Path jar = vdocHome.resolve("/JBoss/bin/run.jar");
+		Path jar = vdocHome.resolve("JBoss/bin/run.jar");
 		setVMParameters("-classpath \"" + jar.toString() + "\" -server -Xmx" + xmx + " -XX:MaxPermSize=" + maxPermSize);
 		setProgramParameters("-c all -b 0.0.0.0");
 		setWorkingDirectory(vdocHome.toString());
