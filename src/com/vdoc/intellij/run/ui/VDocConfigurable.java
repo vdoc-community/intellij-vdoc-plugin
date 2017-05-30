@@ -65,9 +65,9 @@ public class VDocConfigurable extends SettingsEditor<VDoc14RunConfiguration> {
 		browseButton = new TextFieldWithBrowseButton(vdocHome);
 		browseButton.addBrowseFolderListener(new TextBrowseFolderListener(new FileChooserDescriptor(false, true, false, false, false, false)));
 		
-		vdocHomeLabel = new JLabel(VdocExecutionBundle.message("vdoc.run.vdoc.home"));
+		vdocHomeLabel = new JLabel(VdocExecutionBundle.message("run.vdoc.home"));
 		vdocHomeLabel.setLabelFor(vdocHome);
-		xmxLabel = new JLabel("xmx");
+		xmxLabel = new JLabel(VdocExecutionBundle.message("run.xmx"));
 		xmxLabel.setLabelFor(xmx);
 		maxPermSizeLabel = new JLabel("maxPermSize");
 		maxPermSizeLabel.setLabelFor(maxPermSize);
