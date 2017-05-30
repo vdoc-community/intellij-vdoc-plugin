@@ -16,6 +16,7 @@ import com.intellij.openapi.options.SettingsEditorGroup;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
+import com.vdoc.intellij.bundle.VdocExecutionBundle;
 import com.vdoc.intellij.run.ui.VDocConfigurable;
 import org.apache.commons.lang.StringUtils;
 import org.jdom.Element;
@@ -80,7 +81,7 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	public void checkConfiguration() throws RuntimeConfigurationException {
 		Path jboss = vdocHome.resolve("JBoss");
 		if (!jboss.toFile().exists()){
-			throw new RuntimeConfigurationError("No JBoss directory in vdocHome : " + vdocHome);
+			throw new RuntimeConfigurationError(VdocExecutionBundle.message("run.error.vdoc.home.no.jboss", vdocHome));
 		}
 	}
 	
