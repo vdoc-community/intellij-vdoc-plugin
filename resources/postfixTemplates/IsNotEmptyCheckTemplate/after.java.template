@@ -1,0 +1,9 @@
+import java.util.Collection;
+
+public class Foo {
+  void m(Collection c) {
+      if (!c.isEmpty(){
+
+      }
+  }
+}

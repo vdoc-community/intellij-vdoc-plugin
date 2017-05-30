@@ -1,0 +1,7 @@
+import com.axemble.vdoc.sdk.modules.IModule
+
+public class Foo {
+  void m(IModule m) {
+    <spot>m</spot>$key
+  }
+}

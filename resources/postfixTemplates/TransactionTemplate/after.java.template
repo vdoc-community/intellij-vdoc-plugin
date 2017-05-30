@@ -1,0 +1,17 @@
+import com.axemble.vdoc.sdk.modules.IModule
+
+public class Foo {
+  void m(IModule m) {
+	m.beginTransaction();
+	try {
+
+	m.commitTransaction();
+	} catch (ModuleException e) {
+		LOG.error(e);
+	} finally {
+		if (m.isTransactionActive()) {
+			m.rollbackTransaction();
+		}
+	}
+  }
+}
