@@ -78,6 +78,10 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	 */
 	@Override
 	public void checkConfiguration() throws RuntimeConfigurationException {
+		Path jboss = vdocHome.resolve("JBoss");
+		if (!jboss.toFile().exists()){
+			throw new RuntimeConfigurationError("No JBoss directory in vdocHome : " + vdocHome);
+		}
 	}
 	
 	@Override
