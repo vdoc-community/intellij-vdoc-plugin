@@ -69,7 +69,7 @@ public class VDocConfigurable extends SettingsEditor<VDoc14RunConfiguration> {
 		vdocHomeLabel.setLabelFor(vdocHome);
 		xmxLabel = new JLabel(VdocExecutionBundle.message("run.xmx"));
 		xmxLabel.setLabelFor(xmx);
-		maxPermSizeLabel = new JLabel("maxPermSize");
+		maxPermSizeLabel = new JLabel(VdocExecutionBundle.message("run.maxPermSize"));
 		maxPermSizeLabel.setLabelFor(maxPermSize);
 		
 		panel.add(vdocHomeLabel);
