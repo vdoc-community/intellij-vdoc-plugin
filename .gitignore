@@ -32,3 +32,5 @@ Supprimerait .idea/dbnavigator.xml
 Supprimerait .idea/kotlinc.xml
 Supprimerait .idea/vcs.xml
 Supprimerait out/production/intellij-vdoc-plugin/generated/
+
+intellij-vdoc-plugin.jar
