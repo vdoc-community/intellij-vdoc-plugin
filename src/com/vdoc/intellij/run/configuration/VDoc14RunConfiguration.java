@@ -34,6 +34,7 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	private Path vdocHome;
 	private String xmx;
 	private String maxPermSize;
+	private Boolean useDCEVM;
 	
 	public VDoc14RunConfiguration(Project project, ConfigurationFactory configurationFactory) {
 		super("VDoc14+", project, configurationFactory);
@@ -102,6 +103,10 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 		if (maxPermSize != null && StringUtils.isNotEmpty(maxPermSize.getText())) {
 			this.maxPermSize = maxPermSize.getText();
 		}
+		Element useDCEVM = element.getChild("useDCEVM");
+		if (useDCEVM != null && StringUtils.isNotEmpty(useDCEVM.getText())) {
+			this.useDCEVM = Boolean.parseBoolean(useDCEVM.getText());
+		}
 	}
 	
 	@Override
@@ -121,6 +126,11 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 			Element maxPermSize = new Element("maxPermSize");
 			maxPermSize.setText(this.maxPermSize);
 			element.addContent(maxPermSize);
+		}
+		if (this.useDCEVM != null) {
+			Element useDCEVM = new Element("useDCEVM");
+			useDCEVM.setText(this.useDCEVM.toString());
+			element.addContent(useDCEVM);
 		}
 	}
 	
@@ -176,5 +186,24 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	 **/
 	public void setMaxPermSize(String maxPermSize) {
 		this.maxPermSize = maxPermSize;
+	}
+	
+	/**
+	 * get {@link VDoc14RunConfiguration#useDCEVM} property
+	 *
+	 * @return get the useDCEVM property
+	 **/
+	public Boolean isUseDCEVM() {
+		return useDCEVM;
+	}
+	
+	/**
+	 * set {@link VDoc14RunConfiguration#useDCEVM} property
+	 *
+	 * @param useDCEVM set the useDCEVM property
+	 **/
+	public VDoc14RunConfiguration setUseDCEVM(Boolean useDCEVM) {
+		this.useDCEVM = useDCEVM;
+		return this;
 	}
 }
