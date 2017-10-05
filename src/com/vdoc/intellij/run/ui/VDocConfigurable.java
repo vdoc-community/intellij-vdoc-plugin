@@ -27,6 +27,8 @@ public class VDocConfigurable extends SettingsEditor<VDoc14RunConfiguration> {
 	private JTextField xmx;
 	private JLabel maxPermSizeLabel;
 	private JTextField maxPermSize;
+	private JCheckBox useDCEVM;
+	private JLabel useDCEVMLabel;
 	
 	@Override
 	protected void resetEditorFrom(@NotNull VDoc14RunConfiguration runConfiguration) {
@@ -38,6 +40,9 @@ public class VDocConfigurable extends SettingsEditor<VDoc14RunConfiguration> {
 		}
 		if (runConfiguration.getMaxPermSize() != null) {
 			maxPermSize.setText(runConfiguration.getMaxPermSize());
+		}
+		if (runConfiguration.isUseDCEVM() != null) {
+			useDCEVM.setSelected(runConfiguration.isUseDCEVM());
 		}
 	}
 	
@@ -52,17 +57,19 @@ public class VDocConfigurable extends SettingsEditor<VDoc14RunConfiguration> {
 		if (StringUtils.isNotEmpty(maxPermSize.getText())) {
 			runConfiguration.setMaxPermSize(maxPermSize.getText());
 		}
+		runConfiguration.setUseDCEVM(useDCEVM.isSelected());
 	}
 	
 	@NotNull
 	@Override
 	protected JComponent createEditor() {
 		this.panel = new JPanel();
-		panel.setLayout(new GridLayout(3, 2));
+		panel.setLayout(new GridLayout(4, 2));
 		vdocHome = new JTextField();
 		xmx = new JTextField();
 		maxPermSize = new JTextField();
 		browseButton = new TextFieldWithBrowseButton(vdocHome);
+		useDCEVM = new JCheckBox();
 		browseButton.addBrowseFolderListener(new TextBrowseFolderListener(new FileChooserDescriptor(false, true, false, false, false, false)));
 		
 		vdocHomeLabel = new JLabel(VdocExecutionBundle.message("run.vdoc.home"));
@@ -71,6 +78,8 @@ public class VDocConfigurable extends SettingsEditor<VDoc14RunConfiguration> {
 		xmxLabel.setLabelFor(xmx);
 		maxPermSizeLabel = new JLabel(VdocExecutionBundle.message("run.maxPermSize"));
 		maxPermSizeLabel.setLabelFor(maxPermSize);
+		useDCEVMLabel = new JLabel(VdocExecutionBundle.message("run.useDCEVM"));
+		useDCEVMLabel.setLabelFor(useDCEVM);
 		
 		panel.add(vdocHomeLabel);
 		panel.add(browseButton);
@@ -78,6 +87,8 @@ public class VDocConfigurable extends SettingsEditor<VDoc14RunConfiguration> {
 		panel.add(xmx);
 		panel.add(maxPermSizeLabel);
 		panel.add(maxPermSize);
+		panel.add(useDCEVMLabel);
+		panel.add(useDCEVM);
 		return panel;
 	}
 	
