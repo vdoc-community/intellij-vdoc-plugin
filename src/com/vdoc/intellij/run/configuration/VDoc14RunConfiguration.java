@@ -46,7 +46,17 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
 		setMainClassName("org.jboss.Main");
 		Path jar = vdocHome.resolve("JBoss/bin/run.jar");
-		setVMParameters("-classpath \"" + jar.toString() + "\" -server -Xmx" + xmx + " -XX:MaxPermSize=" + maxPermSize);
+		StringBuilder parameterBuilder = new StringBuilder();
+		parameterBuilder.append("-classpath \"");
+		parameterBuilder.append(jar.toString());
+		parameterBuilder.append("\" -server -Xmx");
+		parameterBuilder.append(xmx);
+		parameterBuilder.append(" -XX:MaxPermSize=");
+		parameterBuilder.append(maxPermSize);
+		if (useDCEVM != null && useDCEVM){
+			parameterBuilder.append(" -XXaltjvm=dcevm");
+		}
+		setVMParameters(parameterBuilder.toString());
 		setProgramParameters("-c all -b 0.0.0.0");
 		setWorkingDirectory(vdocHome.toString());
 		
