@@ -44,6 +44,7 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	
 	@Override
 	public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
+		
 		setMainClassName("org.jboss.Main");
 		Path jar = vdocHome.resolve("JBoss/bin/run.jar");
 		StringBuilder parameterBuilder = new StringBuilder();
@@ -53,13 +54,12 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 		parameterBuilder.append(xmx);
 		parameterBuilder.append(" -XX:MaxPermSize=");
 		parameterBuilder.append(maxPermSize);
-		if (useDCEVM != null && useDCEVM){
+		if (useDCEVM != null && useDCEVM) {
 			parameterBuilder.append(" -XXaltjvm=dcevm");
 		}
 		setVMParameters(parameterBuilder.toString());
 		setProgramParameters("-c all -b 0.0.0.0");
 		setWorkingDirectory(vdocHome.toString());
-		
 		return super.getState(executor, env);
 	}
 	
