@@ -3,64 +3,73 @@ package com.vdoc.intellij.run.configuration;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
-import com.intellij.execution.application.ApplicationConfiguration;
+import com.intellij.execution.configuration.AbstractRunConfiguration;
+import com.intellij.execution.configurations.CommandLineState;
 import com.intellij.execution.configurations.ConfigurationFactory;
+import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.RunConfiguration;
+import com.intellij.execution.configurations.RunConfigurationModule;
+import com.intellij.execution.configurations.RunConfigurationWithSuppressedDefaultDebugAction;
 import com.intellij.execution.configurations.RunProfileState;
 import com.intellij.execution.configurations.RuntimeConfigurationError;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.impl.CheckableRunConfigurationEditor;
+import com.intellij.execution.process.KillableColoredProcessHandler;
+import com.intellij.execution.process.OSProcessHandler;
+import com.intellij.execution.process.ProcessHandler;
+import com.intellij.execution.process.ProcessTerminatedListener;
 import com.intellij.execution.runners.ExecutionEnvironment;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.options.SettingsEditorGroup;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.vdoc.intellij.bundle.VdocExecutionBundle;
-import com.vdoc.intellij.run.ui.VDocConfigurable;
+import com.vdoc.intellij.run.ui.Process16Configurable;
 import org.apache.commons.lang.StringUtils;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 
 /**
  * Created by famaridon on 11/05/17.
  */
-public class VDoc14RunConfiguration extends ApplicationConfiguration {
+public class Process16RunConfiguration extends AbstractRunConfiguration implements RunConfigurationWithSuppressedDefaultDebugAction {
 	private final Project project;
-	private final VDocConfigurable configurable;
+	private final Process16Configurable configurable;
 	private Path vdocHome;
-	private String xmx;
-	private String maxPermSize;
-	private Boolean useDCEVM;
 	
-	public VDoc14RunConfiguration(Project project, ConfigurationFactory configurationFactory) {
-		super("VDoc14+", project, configurationFactory);
-		this.project = project;
-		this.configurable = new VDocConfigurable();
+	public Process16RunConfiguration(String name, RunConfigurationModule module, ConfigurationFactory configurationFactory) {
+		super(name, module, configurationFactory);
+		this.project = this.getProject();
+		this.configurable = new Process16Configurable();
 	}
 	
 	@Override
 	public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
 		
-		setMainClassName("org.jboss.Main");
-		Path jar = vdocHome.resolve("JBoss/bin/run.jar");
-		StringBuilder parameterBuilder = new StringBuilder();
-		parameterBuilder.append("-classpath \"");
-		parameterBuilder.append(jar.toString());
-		parameterBuilder.append("\" -server -Xmx");
-		parameterBuilder.append(xmx);
-		parameterBuilder.append(" -XX:MaxPermSize=");
-		parameterBuilder.append(maxPermSize);
-		if (useDCEVM != null && useDCEVM) {
-			parameterBuilder.append(" -XXaltjvm=dcevm");
-		}
-		setVMParameters(parameterBuilder.toString());
-		setProgramParameters("-c all -b 0.0.0.0");
-		setWorkingDirectory(vdocHome.toString());
-		return super.getState(executor, env);
+		return new CommandLineState(env) {
+			@NotNull
+			@Override
+			protected ProcessHandler startProcess() throws ExecutionException {
+				GeneralCommandLine commandLine = new GeneralCommandLine();
+				commandLine.setExePath("cmd.exe");
+				commandLine.getParametersList().addParametersString("/c");
+				commandLine.addParameter(vdocHome.resolve("scripts/start.bat").toString());
+				commandLine.getParametersList().addParametersString(vdocHome.toString() + "/");
+				commandLine.withWorkDirectory(vdocHome.toFile());
+				commandLine.withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.SYSTEM);
+				commandLine.withEnvironment(Process16RunConfiguration.this.getEnvs());
+				OSProcessHandler osProcessHandler = new KillableColoredProcessHandler(commandLine.createProcess(), commandLine.getCommandLineString());
+				ProcessTerminatedListener.attach(osProcessHandler, project);
+				return osProcessHandler;
+			}
+		};
+		
 	}
 	
 	/**
@@ -74,7 +83,7 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	@NotNull
 	@Override
 	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-		SettingsEditorGroup<VDoc14RunConfiguration> group = new SettingsEditorGroup<>();
+		SettingsEditorGroup<Process16RunConfiguration> group = new SettingsEditorGroup<>();
 		group.addEditor(ExecutionBundle.message("run.configuration.configuration.tab.title"), this.configurable);
 		return group;
 	}
@@ -91,9 +100,9 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	@Override
 	public void checkConfiguration() throws RuntimeConfigurationException {
 		if (vdocHome != null) {
-			Path jboss = vdocHome.resolve("JBoss");
+			Path jboss = vdocHome.resolve("wildfly");
 			if (!jboss.toFile().exists()) {
-				throw new RuntimeConfigurationError(VdocExecutionBundle.message("run.error.vdoc.home.no.jboss", vdocHome));
+				throw new RuntimeConfigurationError(VdocExecutionBundle.message("run.error.vdoc.home.no.wildfly", vdocHome));
 			}
 		}
 	}
@@ -105,18 +114,6 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 		if (home != null && StringUtils.isNotEmpty(home.getText())) {
 			this.vdocHome = Paths.get(home.getText());
 		}
-		Element xmx = element.getChild("xmx");
-		if (xmx != null && StringUtils.isNotEmpty(xmx.getText())) {
-			this.xmx = xmx.getText();
-		}
-		Element maxPermSize = element.getChild("maxPermSize");
-		if (maxPermSize != null && StringUtils.isNotEmpty(maxPermSize.getText())) {
-			this.maxPermSize = maxPermSize.getText();
-		}
-		Element useDCEVM = element.getChild("useDCEVM");
-		if (useDCEVM != null && StringUtils.isNotEmpty(useDCEVM.getText())) {
-			this.useDCEVM = Boolean.parseBoolean(useDCEVM.getText());
-		}
 	}
 	
 	@Override
@@ -127,25 +124,10 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 			home.setText(this.vdocHome.toString());
 			element.addContent(home);
 		}
-		if (this.xmx != null) {
-			Element xmx = new Element("xmx");
-			xmx.setText(this.xmx);
-			element.addContent(xmx);
-		}
-		if (this.maxPermSize != null) {
-			Element maxPermSize = new Element("maxPermSize");
-			maxPermSize.setText(this.maxPermSize);
-			element.addContent(maxPermSize);
-		}
-		if (this.useDCEVM != null) {
-			Element useDCEVM = new Element("useDCEVM");
-			useDCEVM.setText(this.useDCEVM.toString());
-			element.addContent(useDCEVM);
-		}
 	}
 	
 	/**
-	 * get {@link VDoc14RunConfiguration#vdocHome} property
+	 * get {@link Process16RunConfiguration#vdocHome} property
 	 *
 	 * @return get the vdocHome property
 	 **/
@@ -154,7 +136,7 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	}
 	
 	/**
-	 * set {@link VDoc14RunConfiguration#vdocHome} property
+	 * set {@link Process16RunConfiguration#vdocHome} property
 	 *
 	 * @param vdocHome set the vdocHome property
 	 **/
@@ -162,58 +144,8 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 		this.vdocHome = vdocHome;
 	}
 	
-	/**
-	 * get {@link VDoc14RunConfiguration#xmx} property
-	 *
-	 * @return get the xmx property
-	 **/
-	public String getXmx() {
-		return xmx;
-	}
-	
-	/**
-	 * set {@link VDoc14RunConfiguration#xmx} property
-	 *
-	 * @param xmx set the xmx property
-	 **/
-	public void setXmx(String xmx) {
-		this.xmx = xmx;
-	}
-	
-	/**
-	 * get {@link VDoc14RunConfiguration#maxPermSize} property
-	 *
-	 * @return get the maxPermSize property
-	 **/
-	public String getMaxPermSize() {
-		return maxPermSize;
-	}
-	
-	/**
-	 * set {@link VDoc14RunConfiguration#maxPermSize} property
-	 *
-	 * @param maxPermSize set the maxPermSize property
-	 **/
-	public void setMaxPermSize(String maxPermSize) {
-		this.maxPermSize = maxPermSize;
-	}
-	
-	/**
-	 * get {@link VDoc14RunConfiguration#useDCEVM} property
-	 *
-	 * @return get the useDCEVM property
-	 **/
-	public Boolean isUseDCEVM() {
-		return useDCEVM;
-	}
-	
-	/**
-	 * set {@link VDoc14RunConfiguration#useDCEVM} property
-	 *
-	 * @param useDCEVM set the useDCEVM property
-	 **/
-	public VDoc14RunConfiguration setUseDCEVM(Boolean useDCEVM) {
-		this.useDCEVM = useDCEVM;
-		return this;
+	@Override
+	public Collection<Module> getValidModules() {
+		return this.getAllModules();
 	}
 }

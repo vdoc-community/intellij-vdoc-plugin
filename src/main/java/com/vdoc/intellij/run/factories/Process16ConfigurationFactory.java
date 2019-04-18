@@ -3,19 +3,18 @@ package com.vdoc.intellij.run.factories;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.execution.configurations.RunConfiguration;
+import com.intellij.execution.configurations.RunConfigurationModule;
 import com.intellij.openapi.project.Project;
-import com.vdoc.intellij.run.configuration.VDoc14RunConfiguration;
+import com.vdoc.intellij.run.configuration.Process16RunConfiguration;
 import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
 
 /**
  * Created by famaridon on 11/05/17.
  */
-public class VDoc14ConfigurationFactory extends ConfigurationFactory
+public class Process16ConfigurationFactory extends ConfigurationFactory
 {
 	
-	public VDoc14ConfigurationFactory(@NotNull ConfigurationType type)
+	public Process16ConfigurationFactory(@NotNull ConfigurationType type)
 	{
 		super(type);
 	}
@@ -30,13 +29,13 @@ public class VDoc14ConfigurationFactory extends ConfigurationFactory
 	@Override
 	public RunConfiguration createTemplateConfiguration(@NotNull Project project)
 	{
-		return new VDoc14RunConfiguration(project, this);
+		return new Process16RunConfiguration(getName(), new RunConfigurationModule(project), this);
 	}
 	
 	@NotNull
 	@Override
 	public String getName()
 	{
-		return "VDoc14+";
+		return "Process16+";
 	}
 }
