@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.vdoc.intellij</id>
   <name>VDoc intellij tools</name>
-  <version>1.4.0-SNAPSHOT</version>
+  <version>1.4.0</version>
   <vendor email="famaridon@visiativ.com" url="http://http://www.visiativ.com/">Visiativ</vendor>
   <depends>com.intellij.modules.lang</depends>
   <depends>com.intellij.modules.java</depends>
@@ -12,6 +12,7 @@
     ]]></description>
 
   <change-notes>
+    - Add a run configuration to run config/applyconfig
   </change-notes>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
