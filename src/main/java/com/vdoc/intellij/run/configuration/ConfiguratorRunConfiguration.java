@@ -44,12 +44,13 @@ public class ConfiguratorRunConfiguration extends ApplicationConfiguration {
 		
 		this.setMainClassName("com.axemble.vdoc.configurator.Configurator");
 		Path jar = this.getVdocHome().resolve("configurator/Configurator-suite.jar");
-		StringBuilder parameterBuilder = new StringBuilder();
-		parameterBuilder.append("-classpath \"");
-		parameterBuilder.append(jar.toString());
-		setVMParameters(parameterBuilder.toString());
+		String parameterBuilder = "-classpath \"" + jar.toString();
+		setVMParameters(parameterBuilder);
 		if (this.isApply() != null && this.isApply()) {
 			this.setProgramParameters("console");
+		}
+		else {
+			this.setProgramParameters("");
 		}
 		setWorkingDirectory(this.getVdocHome().toString() + "/configurator");
 		return super.getState(executor, env);
