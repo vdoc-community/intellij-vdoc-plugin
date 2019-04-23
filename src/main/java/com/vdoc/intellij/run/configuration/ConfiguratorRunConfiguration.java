@@ -92,7 +92,7 @@ public class ConfiguratorRunConfiguration extends ApplicationConfiguration {
 	}
 	
 	@Override
-	public void readExternal(Element element) throws InvalidDataException {
+	public void readExternal(@NotNull Element element) throws InvalidDataException {
 		super.readExternal(element);
 		Element home = element.getChild("vdocHome");
 		if (home != null && StringUtils.isNotEmpty(home.getText())) {
@@ -105,7 +105,7 @@ public class ConfiguratorRunConfiguration extends ApplicationConfiguration {
 	}
 	
 	@Override
-	public void writeExternal(Element element) throws WriteExternalException {
+	public void writeExternal(@NotNull Element element) throws WriteExternalException {
 		super.writeExternal(element);
 		if (this.getVdocHome() != null) {
 			Element home = new Element("vdocHome");

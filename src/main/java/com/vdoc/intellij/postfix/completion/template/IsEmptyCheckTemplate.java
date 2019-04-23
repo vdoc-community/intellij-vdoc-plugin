@@ -1,8 +1,6 @@
 package com.vdoc.intellij.postfix.completion.template;
 
 import com.intellij.codeInsight.generation.surroundWith.JavaWithIfExpressionSurrounder;
-import com.intellij.codeInsight.template.postfix.templates.PostfixTemplateExpressionSelector;
-import com.intellij.codeInsight.template.postfix.templates.PostfixTemplatePsiInfo;
 import com.intellij.codeInsight.template.postfix.templates.SurroundPostfixTemplateBase;
 import com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.lang.surroundWith.Surrounder;
@@ -19,14 +17,7 @@ import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplate
  */
 public class IsEmptyCheckTemplate extends SurroundPostfixTemplateBase {
 	
-	public static final Condition<PsiElement> IS_COLLECTION = new Condition<PsiElement>()
-	{
-		@Override
-		public boolean value(PsiElement element)
-		{
-			return InheritanceUtil.isInheritor(((PsiExpression)element).getType(), "java.util.Collection");
-		}
-	};
+	private static final Condition<PsiElement> IS_COLLECTION = element -> InheritanceUtil.isInheritor(((PsiExpression)element).getType(), "java.util.Collection");
 	
 	public IsEmptyCheckTemplate() {
 		this("empty", "if (expr.isEmpty())");
@@ -44,7 +35,7 @@ public class IsEmptyCheckTemplate extends SurroundPostfixTemplateBase {
 	
 	@NotNull
 	@Override
-	protected Surrounder getSurrounder()  {
+	protected Surrounder getSurrounder() {
 		return new JavaWithIfExpressionSurrounder();
 	}
 }

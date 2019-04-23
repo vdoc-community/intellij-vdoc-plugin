@@ -14,19 +14,18 @@ import java.util.Set;
 /**
  * Created by famaridon on 07/07/2016.
  */
-public class VDocPostfixTemplateProvider extends JavaPostfixTemplateProvider
-{
-		private final Set<PostfixTemplate> templates;
-
-		public VDocPostfixTemplateProvider()
-		{
-				templates = ContainerUtil.<PostfixTemplate>newHashSet(new ProtocolUriTemplate(), new TransactionTemplate(), new IsEmptyCheckTemplate(), new IsNotEmptyCheckTemplate());
-		}
-
-		@NotNull
-		@Override
-		public Set<PostfixTemplate> getTemplates()
-		{
-				return templates;
-		}
+public class VDocPostfixTemplateProvider extends JavaPostfixTemplateProvider {
+	private final Set<PostfixTemplate> templates;
+	
+	public VDocPostfixTemplateProvider() {
+		this.templates = ContainerUtil.newHashSet(new ProtocolUriTemplate(), new TransactionTemplate(), new IsEmptyCheckTemplate(), new IsNotEmptyCheckTemplate());
+	}
+	
+	@NotNull
+	@Override
+	public Set<PostfixTemplate> getTemplates() {
+		return this.templates;
+	}
+	
+	
 }

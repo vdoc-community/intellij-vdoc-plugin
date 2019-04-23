@@ -43,21 +43,21 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	@Override
 	public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
 		
-		setMainClassName("org.jboss.Main");
-		Path jar = vdocHome.resolve("JBoss/bin/run.jar");
+		this.setMainClassName("org.jboss.Main");
+		Path jar = this.getVdocHome().resolve("JBoss/bin/run.jar");
 		StringBuilder parameterBuilder = new StringBuilder();
 		parameterBuilder.append("-classpath \"");
 		parameterBuilder.append(jar.toString());
 		parameterBuilder.append("\" -server -Xmx");
-		parameterBuilder.append(xmx);
+		parameterBuilder.append(this.getXmx());
 		parameterBuilder.append(" -XX:MaxPermSize=");
-		parameterBuilder.append(maxPermSize);
-		if (useDCEVM != null && useDCEVM) {
+		parameterBuilder.append(this.getMaxPermSize());
+		if (this.isUseDCEVM() != null && this.isUseDCEVM()) {
 			parameterBuilder.append(" -XXaltjvm=dcevm");
 		}
-		setVMParameters(parameterBuilder.toString());
-		setProgramParameters("-c all -b 0.0.0.0");
-		setWorkingDirectory(vdocHome.toString());
+		this.setVMParameters(parameterBuilder.toString());
+		this.setProgramParameters("-c all -b 0.0.0.0");
+		this.setWorkingDirectory(this.getVdocHome().toString());
 		return super.getState(executor, env);
 	}
 	
@@ -73,7 +73,7 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	@Override
 	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
 		SettingsEditorGroup<VDoc14RunConfiguration> group = new SettingsEditorGroup<>();
-		group.addEditor(ExecutionBundle.message("run.configuration.configuration.tab.title"), this.configurable);
+		group.addEditor(ExecutionBundle.message("run.configuration.configuration.tab.title"), this.getConfigurable());
 		return group;
 	}
 	
@@ -88,8 +88,8 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	 */
 	@Override
 	public void checkConfiguration() throws RuntimeConfigurationException {
-		if (vdocHome != null) {
-			Path jboss = vdocHome.resolve("JBoss");
+		if (this.getVdocHome() != null) {
+			Path jboss = this.getVdocHome().resolve("JBoss");
 			if (!jboss.toFile().exists()) {
 				throw new RuntimeConfigurationError(VdocExecutionBundle.message("run.error.vdoc.home.no.jboss", vdocHome));
 			}
@@ -97,47 +97,47 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	}
 	
 	@Override
-	public void readExternal(Element element) throws InvalidDataException {
+	public void readExternal(@NotNull Element element) throws InvalidDataException {
 		super.readExternal(element);
 		Element home = element.getChild("vdocHome");
 		if (home != null && StringUtils.isNotEmpty(home.getText())) {
-			this.vdocHome = Paths.get(home.getText());
+			this.setVdocHome(Paths.get(home.getText()));
 		}
 		Element xmx = element.getChild("xmx");
 		if (xmx != null && StringUtils.isNotEmpty(xmx.getText())) {
-			this.xmx = xmx.getText();
+			this.setXmx(xmx.getText());
 		}
 		Element maxPermSize = element.getChild("maxPermSize");
 		if (maxPermSize != null && StringUtils.isNotEmpty(maxPermSize.getText())) {
-			this.maxPermSize = maxPermSize.getText();
+			this.setMaxPermSize(maxPermSize.getText());
 		}
 		Element useDCEVM = element.getChild("useDCEVM");
 		if (useDCEVM != null && StringUtils.isNotEmpty(useDCEVM.getText())) {
-			this.useDCEVM = Boolean.parseBoolean(useDCEVM.getText());
+			this.setUseDCEVM(Boolean.parseBoolean(useDCEVM.getText()));
 		}
 	}
 	
 	@Override
-	public void writeExternal(Element element) throws WriteExternalException {
+	public void writeExternal(@NotNull Element element) throws WriteExternalException {
 		super.writeExternal(element);
-		if (this.vdocHome != null) {
+		if (this.getVdocHome() != null) {
 			Element home = new Element("vdocHome");
-			home.setText(this.vdocHome.toString());
+			home.setText(this.getVdocHome().toString());
 			element.addContent(home);
 		}
-		if (this.xmx != null) {
+		if (this.getXmx() != null) {
 			Element xmx = new Element("xmx");
-			xmx.setText(this.xmx);
+			xmx.setText(this.getXmx());
 			element.addContent(xmx);
 		}
-		if (this.maxPermSize != null) {
+		if (this.getMaxPermSize() != null) {
 			Element maxPermSize = new Element("maxPermSize");
-			maxPermSize.setText(this.maxPermSize);
+			maxPermSize.setText(this.getMaxPermSize());
 			element.addContent(maxPermSize);
 		}
-		if (this.useDCEVM != null) {
+		if (this.isUseDCEVM() != null) {
 			Element useDCEVM = new Element("useDCEVM");
-			useDCEVM.setText(this.useDCEVM.toString());
+			useDCEVM.setText(this.isUseDCEVM().toString());
 			element.addContent(useDCEVM);
 		}
 	}
@@ -148,7 +148,7 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	 * @return get the vdocHome property
 	 **/
 	public Path getVdocHome() {
-		return vdocHome;
+		return this.vdocHome;
 	}
 	
 	/**
@@ -166,7 +166,7 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	 * @return get the xmx property
 	 **/
 	public String getXmx() {
-		return xmx;
+		return this.xmx;
 	}
 	
 	/**
@@ -184,7 +184,7 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	 * @return get the maxPermSize property
 	 **/
 	public String getMaxPermSize() {
-		return maxPermSize;
+		return this.maxPermSize;
 	}
 	
 	/**
@@ -202,7 +202,7 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	 * @return get the useDCEVM property
 	 **/
 	public Boolean isUseDCEVM() {
-		return useDCEVM;
+		return this.useDCEVM;
 	}
 	
 	/**
@@ -213,4 +213,9 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	public void setUseDCEVM(Boolean useDCEVM) {
 		this.useDCEVM = useDCEVM;
 	}
+	
+	private VDocConfigurable getConfigurable() {
+		return configurable;
+	}
+	
 }

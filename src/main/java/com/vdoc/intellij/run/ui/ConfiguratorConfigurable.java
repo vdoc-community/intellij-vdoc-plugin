@@ -7,7 +7,6 @@ import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.vdoc.intellij.bundle.VdocExecutionBundle;
 import com.vdoc.intellij.run.configuration.ConfiguratorRunConfiguration;
-import com.vdoc.intellij.run.configuration.VDoc14RunConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,41 +29,88 @@ public class ConfiguratorConfigurable extends SettingsEditor<ConfiguratorRunConf
 	@Override
 	protected void resetEditorFrom(@NotNull ConfiguratorRunConfiguration runConfiguration) {
 		if (runConfiguration.getVdocHome() != null) {
-			vdocHome.setText(runConfiguration.getVdocHome().toString());
+			this.getVdocHome().setText(runConfiguration.getVdocHome().toString());
 		}
 		if (runConfiguration.isApply() != null) {
-			apply.setSelected(runConfiguration.isApply());
+			this.getApply().setSelected(runConfiguration.isApply());
 		}
 	}
 	
 	@Override
 	protected void applyEditorTo(@NotNull ConfiguratorRunConfiguration runConfiguration) throws ConfigurationException {
-		if (StringUtils.isNotEmpty(vdocHome.getText())) {
-			runConfiguration.setVdocHome(Paths.get(vdocHome.getText()));
+		if (StringUtils.isNotEmpty(this.getVdocHome().getText())) {
+			runConfiguration.setVdocHome(Paths.get(this.getVdocHome().getText()));
 		}
-		runConfiguration.setApply(apply.isSelected());
+		runConfiguration.setApply(this.getApply().isSelected());
 	}
 	
 	@NotNull
 	@Override
 	protected JComponent createEditor() {
-		this.panel = new JPanel();
-		panel.setLayout(new GridLayout(4, 2));
-		vdocHome = new JTextField();
-		browseButton = new TextFieldWithBrowseButton(vdocHome);
-		apply = new JCheckBox();
-		browseButton.addBrowseFolderListener(new TextBrowseFolderListener(new FileChooserDescriptor(false, true, false, false, false, false)));
+		this.setPanel(new JPanel());
+		this.getPanel().setLayout(new GridLayout(4, 2));
+		this.setVdocHome(new JTextField());
+		this.setBrowseButton(new TextFieldWithBrowseButton(this.getVdocHome()));
+		this.setApply(new JCheckBox());
+		this.getBrowseButton().addBrowseFolderListener(new TextBrowseFolderListener(new FileChooserDescriptor(false, true, false, false, false, false)));
 		
-		vdocHomeLabel = new JLabel(VdocExecutionBundle.message("run.vdoc.home"));
-		vdocHomeLabel.setLabelFor(vdocHome);
-		applyLabel = new JLabel(VdocExecutionBundle.message("run.apply"));
-		applyLabel.setLabelFor(apply);
+		this.setVdocHomeLabel(new JLabel(VdocExecutionBundle.message("run.vdoc.home")));
+		this.getVdocHomeLabel().setLabelFor(this.getVdocHome());
+		this.setApplyLabel(new JLabel(VdocExecutionBundle.message("run.apply")));
+		this.getApplyLabel().setLabelFor(this.getApply());
 		
-		panel.add(vdocHomeLabel);
-		panel.add(browseButton);
-		panel.add(applyLabel);
-		panel.add(apply);
-		return panel;
+		this.getPanel().add(this.getVdocHomeLabel());
+		this.getPanel().add(this.getBrowseButton());
+		this.getPanel().add(this.getApplyLabel());
+		this.getPanel().add(this.getApply());
+		return this.getPanel();
 	}
 	
+	public JPanel getPanel() {
+		return this.panel;
+	}
+	
+	public void setPanel(JPanel panel) {
+		this.panel = panel;
+	}
+	
+	public JLabel getVdocHomeLabel() {
+		return this.vdocHomeLabel;
+	}
+	
+	public void setVdocHomeLabel(JLabel vdocHomeLabel) {
+		this.vdocHomeLabel = vdocHomeLabel;
+	}
+	
+	public JTextField getVdocHome() {
+		return this.vdocHome;
+	}
+	
+	public void setVdocHome(JTextField vdocHome) {
+		this.vdocHome = vdocHome;
+	}
+	
+	public TextFieldWithBrowseButton getBrowseButton() {
+		return this.browseButton;
+	}
+	
+	public void setBrowseButton(TextFieldWithBrowseButton browseButton) {
+		this.browseButton = browseButton;
+	}
+	
+	public JCheckBox getApply() {
+		return this.apply;
+	}
+	
+	public void setApply(JCheckBox apply) {
+		this.apply = apply;
+	}
+	
+	public JLabel getApplyLabel() {
+		return this.applyLabel;
+	}
+	
+	public void setApplyLabel(JLabel applyLabel) {
+		this.applyLabel = applyLabel;
+	}
 }

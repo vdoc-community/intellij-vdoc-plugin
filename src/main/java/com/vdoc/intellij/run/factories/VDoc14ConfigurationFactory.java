@@ -33,6 +33,7 @@ public class VDoc14ConfigurationFactory extends ConfigurationFactory
 		return new VDoc14RunConfiguration(project, this);
 	}
 	
+	@NotNull
 	@Override
 	public String getName()
 	{

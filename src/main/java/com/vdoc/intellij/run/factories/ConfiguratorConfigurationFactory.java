@@ -32,6 +32,7 @@ public class ConfiguratorConfigurationFactory extends ConfigurationFactory
 		return new ConfiguratorRunConfiguration(project, this);
 	}
 	
+	@NotNull
 	@Override
 	public String getName()
 	{
