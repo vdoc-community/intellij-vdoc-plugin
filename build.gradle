@@ -17,5 +17,10 @@ intellij {
     pluginName 'VDoc intellij tools'
 }
 
+publishPlugin {
+    username intellijPublishUsername
+    password intellijPublishPassword
+}
+
 group 'com.vdoc.intellij'
-version '1.4.0-SNAPSHOT' // Plugin version
+version '1.4.0' // Plugin version
