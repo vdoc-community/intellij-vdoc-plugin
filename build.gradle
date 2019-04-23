@@ -19,7 +19,7 @@ intellij {
 
 publishPlugin {
     username intellijPublishUsername
-    password intellijPublishPassword
+    token intellijPublishPassword
 }
 
 group 'com.vdoc.intellij'
