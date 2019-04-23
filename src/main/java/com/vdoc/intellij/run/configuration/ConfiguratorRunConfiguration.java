@@ -30,14 +30,12 @@ import java.nio.file.Paths;
  * Created by famaridon on 11/05/17.
  */
 public class ConfiguratorRunConfiguration extends ApplicationConfiguration {
-	private final Project project;
 	private final ConfiguratorConfigurable configurable;
 	private Path vdocHome;
 	private Boolean apply;
 	
 	public ConfiguratorRunConfiguration(Project project, ConfigurationFactory configurationFactory) {
 		super("Configurator", project, configurationFactory);
-		this.project = project;
 		this.configurable = new ConfiguratorConfigurable();
 	}
 	

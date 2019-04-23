@@ -29,7 +29,6 @@ import java.nio.file.Paths;
  * Created by famaridon on 11/05/17.
  */
 public class VDoc14RunConfiguration extends ApplicationConfiguration {
-	private final Project project;
 	private final VDocConfigurable configurable;
 	private Path vdocHome;
 	private String xmx;
@@ -38,7 +37,6 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	
 	public VDoc14RunConfiguration(Project project, ConfigurationFactory configurationFactory) {
 		super("VDoc14+", project, configurationFactory);
-		this.project = project;
 		this.configurable = new VDocConfigurable();
 	}
 	
@@ -212,8 +210,7 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	 *
 	 * @param useDCEVM set the useDCEVM property
 	 **/
-	public VDoc14RunConfiguration setUseDCEVM(Boolean useDCEVM) {
+	public void setUseDCEVM(Boolean useDCEVM) {
 		this.useDCEVM = useDCEVM;
-		return this;
 	}
 }
