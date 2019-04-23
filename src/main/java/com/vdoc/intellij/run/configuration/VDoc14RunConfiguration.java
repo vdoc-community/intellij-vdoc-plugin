@@ -29,7 +29,6 @@ import java.nio.file.Paths;
  * Created by famaridon on 11/05/17.
  */
 public class VDoc14RunConfiguration extends ApplicationConfiguration {
-	private final Project project;
 	private final VDocConfigurable configurable;
 	private Path vdocHome;
 	private String xmx;
@@ -38,12 +37,12 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	
 	public VDoc14RunConfiguration(Project project, ConfigurationFactory configurationFactory) {
 		super("VDoc14+", project, configurationFactory);
-		this.project = project;
 		this.configurable = new VDocConfigurable();
 	}
 	
 	@Override
 	public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
+		
 		setMainClassName("org.jboss.Main");
 		Path jar = vdocHome.resolve("JBoss/bin/run.jar");
 		StringBuilder parameterBuilder = new StringBuilder();
@@ -53,13 +52,12 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 		parameterBuilder.append(xmx);
 		parameterBuilder.append(" -XX:MaxPermSize=");
 		parameterBuilder.append(maxPermSize);
-		if (useDCEVM != null && useDCEVM){
+		if (useDCEVM != null && useDCEVM) {
 			parameterBuilder.append(" -XXaltjvm=dcevm");
 		}
 		setVMParameters(parameterBuilder.toString());
 		setProgramParameters("-c all -b 0.0.0.0");
 		setWorkingDirectory(vdocHome.toString());
-		
 		return super.getState(executor, env);
 	}
 	
@@ -212,8 +210,7 @@ public class VDoc14RunConfiguration extends ApplicationConfiguration {
 	 *
 	 * @param useDCEVM set the useDCEVM property
 	 **/
-	public VDoc14RunConfiguration setUseDCEVM(Boolean useDCEVM) {
+	public void setUseDCEVM(Boolean useDCEVM) {
 		this.useDCEVM = useDCEVM;
-		return this;
 	}
 }
