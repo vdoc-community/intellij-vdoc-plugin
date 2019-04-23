@@ -2,6 +2,7 @@ package com.vdoc.intellij.run;
 
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ConfigurationType;
+import com.vdoc.intellij.run.factories.ConfiguratorConfigurationFactory;
 import com.vdoc.intellij.run.factories.VDoc14ConfigurationFactory;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,8 +20,9 @@ public class VDocRunConfigurationType implements ConfigurationType
 	
 	public VDocRunConfigurationType()
 	{
-		this.factories = new ConfigurationFactory[1];
+		this.factories = new ConfigurationFactory[2];
 		this.factories[0] = new VDoc14ConfigurationFactory(this);
+		this.factories[1] = new ConfiguratorConfigurationFactory(this);
 	}
 	
 	/**
