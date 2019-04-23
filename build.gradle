@@ -13,7 +13,7 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
 intellij {
-    version 'IC-2017.1' //IntelliJ IDEA 2016.3 dependency; for a full list of IntelliJ IDEA releases please see https://www.jetbrains.com/intellij-repository/releases
+    version '2019.1' //IntelliJ IDEA 2016.3 dependency; for a full list of IntelliJ IDEA releases please see https://www.jetbrains.com/intellij-repository/releases
     pluginName 'VDoc intellij tools'
 }
 
@@ -22,5 +22,10 @@ publishPlugin {
     token intellijPublishPassword
 }
 
+patchPluginXml {
+    sinceBuild '171.0'
+    untilBuild '191.*'
+}
+
 group 'com.vdoc.intellij'
-version '1.4.0' // Plugin version
+version '1.4.1' // Plugin version
