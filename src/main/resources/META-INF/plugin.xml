@@ -1,8 +1,8 @@
 <idea-plugin version="2">
   <id>com.vdoc.intellij</id>
   <name>VDoc intellij tools</name>
-  <version>1.4.1</version>
-  <vendor email="famaridon@visiativ.com" url="http://http://www.visiativ.com/">Visiativ</vendor>
+  <version>1.4.2</version>
+  <vendor email="famaridon@visiativ.com" url="https://www.visiativ.com/">Visiativ</vendor>
   <depends>com.intellij.modules.lang</depends>
   <depends>com.intellij.modules.java</depends>
 
