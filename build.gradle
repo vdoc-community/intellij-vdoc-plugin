@@ -24,7 +24,6 @@ publishPlugin {
 
 patchPluginXml {
     sinceBuild '171.0'
-    untilBuild '191.*'
 }
 
 group 'com.vdoc.intellij'
