@@ -2,6 +2,7 @@ package com.vdoc.intellij.run;
 
 import com.intellij.execution.configurations.ConfigurationTypeBase;
 import com.vdoc.intellij.run.factories.ConfiguratorConfigurationFactory;
+import com.vdoc.intellij.run.factories.Process16ConfigurationFactory;
 import com.vdoc.intellij.run.factories.VDoc14ConfigurationFactory;
 
 import javax.swing.*;
@@ -18,5 +19,6 @@ public class VDocRunConfigurationType extends ConfigurationTypeBase {
 		super(VDOC_RUN_CONFIGURATION_ID, VDOC_RUN_CONFIGURATION_DISPLAY_NAME, VDOC_RUN_CONFIGURATION_DISPLAY_NAME, new ImageIcon(VDocRunConfigurationType.class.getResource("/images/icon/icon16x16.png")));
 		this.addFactory(new VDoc14ConfigurationFactory(this));
 		this.addFactory(new ConfiguratorConfigurationFactory(this));
+		this.addFactory(new Process16ConfigurationFactory(this));
 	}
 }

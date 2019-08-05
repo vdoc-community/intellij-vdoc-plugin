@@ -24,70 +24,78 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 
-public class ModuleMacro extends Macro {
-	
-	private static String[] getNames(final ExpressionContext context) {
-		//we need to improve this ugly thing
-		LinkedList<String> namesList = new LinkedList<>();
-		namesList.add("getPortalModule()");
-		namesList.add("getWorkflowModule()");
-		namesList.add("getLibraryModule()");
-		namesList.add("getProjectModule()");
-		namesList.add("portalModule");
-		namesList.add("workflowModule");
-		namesList.add("libraryModule");
-		namesList.add("projectModule");
-		
-		return ArrayUtil.toStringArray(namesList);
-	}
-	
-	@Override
-	public String getName() {
-		return "module";
-	}
-	
-	@Override
-	public String getPresentableName() {
-		return "module";
-	}
-	
-	@Override
-	@NotNull
-	public String getDefaultValue() {
-		return "a";
-	}
-	
-	@Override
-	public Result calculateResult(@NotNull Expression[] params, ExpressionContext context) {
-		String[] names = getNames(context);
-		if (names.length == 0) {
-			return null;
+public class ModuleMacro extends Macro
+{
+
+		private static String[] getNames(final ExpressionContext context)
+		{
+				//we need to improve this ugly thing
+				LinkedList<String> namesList = new LinkedList<>();
+				namesList.add("getPortalModule()");
+				namesList.add("getWorkflowModule()");
+				namesList.add("getLibraryModule()");
+				namesList.add("getProjectModule()");
+				namesList.add("portalModule");
+				namesList.add("workflowModule");
+				namesList.add("libraryModule");
+				namesList.add("projectModule");
+
+				return ArrayUtil.toStringArray(namesList);
 		}
-		return new TextResult(names[0]);
-	}
-	
-	@Nullable
-	@Override
-	public Result calculateQuickResult(@NotNull Expression[] params, ExpressionContext context) {
-		return this.calculateResult(params, context);
-	}
-	
-	@Override
-	public LookupElement[] calculateLookupItems(@NotNull Expression[] params, final ExpressionContext context) {
-		String[] names = getNames(context);
-		if (names.length < 2) {
-			return null;
+
+		@Override
+		public String getName()
+		{
+				return "module";
 		}
-		LookupElement[] items = new LookupElement[names.length];
-		for (int i = 0; i < names.length; i++) {
-			items[i] = LookupElementBuilder.create(names[i]);
+
+		@Override
+		public String getPresentableName()
+		{
+				return "module";
 		}
-		return items;
-	}
-	
-	@Override
-	public boolean isAcceptableInContext(TemplateContextType context) {
-		return context instanceof JavaCodeContextType;
-	}
-	
+
+		@Override
+		@NotNull
+		public String getDefaultValue()
+		{
+				return "a";
+		}
+
+		@Override
+		public Result calculateResult(@NotNull Expression[] params, ExpressionContext context)
+		{
+				String[] names = getNames(context);
+				if (names == null || names.length == 0)
+						return null;
+				return new TextResult(names[0]);
+		}
+
+		@Nullable
+		@Override
+		public Result calculateQuickResult(@NotNull Expression[] params, ExpressionContext context)
+		{
+				return calculateResult(params, context);
+		}
+
+		@Override
+		public LookupElement[] calculateLookupItems(@NotNull Expression[] params, final ExpressionContext context)
+		{
+				String[] names = getNames(context);
+				if (names == null || names.length < 2)
+						return null;
+				LookupElement[] items = new LookupElement[names.length];
+				for (int i = 0; i < names.length; i++)
+				{
+						items[i] = LookupElementBuilder.create(names[i]);
+				}
+				return items;
+		}
+
+		@Override
+		public boolean isAcceptableInContext(TemplateContextType context)
+		{
+				return context instanceof JavaCodeContextType;
+		}
+
 }
