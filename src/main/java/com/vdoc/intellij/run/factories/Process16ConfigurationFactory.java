@@ -29,7 +29,7 @@ public class Process16ConfigurationFactory extends ConfigurationFactory
 	@Override
 	public RunConfiguration createTemplateConfiguration(@NotNull Project project)
 	{
-		return new Process16RunConfiguration(getName(), new RunConfigurationModule(project), this);
+		return new Process16RunConfiguration(project, this);
 	}
 	
 	@NotNull

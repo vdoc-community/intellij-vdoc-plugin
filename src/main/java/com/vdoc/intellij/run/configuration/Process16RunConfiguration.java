@@ -3,23 +3,14 @@ package com.vdoc.intellij.run.configuration;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
-import com.intellij.execution.configuration.AbstractRunConfiguration;
-import com.intellij.execution.configurations.CommandLineState;
+import com.intellij.execution.application.ApplicationConfiguration;
 import com.intellij.execution.configurations.ConfigurationFactory;
-import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.execution.configurations.RunConfigurationModule;
-import com.intellij.execution.configurations.RunConfigurationWithSuppressedDefaultDebugAction;
 import com.intellij.execution.configurations.RunProfileState;
 import com.intellij.execution.configurations.RuntimeConfigurationError;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.impl.CheckableRunConfigurationEditor;
-import com.intellij.execution.process.KillableColoredProcessHandler;
-import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.process.ProcessHandler;
-import com.intellij.execution.process.ProcessTerminatedListener;
 import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.options.SettingsEditorGroup;
 import com.intellij.openapi.project.Project;
@@ -33,43 +24,51 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
+import java.util.Map;
 
 /**
  * Created by famaridon on 11/05/17.
  */
-public class Process16RunConfiguration extends AbstractRunConfiguration implements RunConfigurationWithSuppressedDefaultDebugAction {
+public class Process16RunConfiguration extends ApplicationConfiguration {
 	private final Project project;
 	private final Process16Configurable configurable;
 	private Path vdocHome;
+	private String xmx;
+	private Boolean useDCEVM;
+	private String xms;
 	
-	public Process16RunConfiguration(String name, RunConfigurationModule module, ConfigurationFactory configurationFactory) {
-		super(name, module, configurationFactory);
-		this.project = this.getProject();
+	public Process16RunConfiguration(Project project, ConfigurationFactory configurationFactory) {
+		super("Process16+", project, configurationFactory);
+		this.project = project;
 		this.configurable = new Process16Configurable();
 	}
 	
 	@Override
 	public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
 		
-		return new CommandLineState(env) {
-			@NotNull
-			@Override
-			protected ProcessHandler startProcess() throws ExecutionException {
-				GeneralCommandLine commandLine = new GeneralCommandLine();
-				commandLine.setExePath("cmd.exe");
-				commandLine.getParametersList().addParametersString("/c");
-				commandLine.addParameter(vdocHome.resolve("scripts/start.bat").toString());
-				commandLine.getParametersList().addParametersString(vdocHome.toString() + "/");
-				commandLine.withWorkDirectory(vdocHome.toFile());
-				commandLine.withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.SYSTEM);
-				commandLine.withEnvironment(Process16RunConfiguration.this.getEnvs());
-				OSProcessHandler osProcessHandler = new KillableColoredProcessHandler(commandLine.createProcess(), commandLine.getCommandLineString());
-				ProcessTerminatedListener.attach(osProcessHandler, project);
-				return osProcessHandler;
-			}
-		};
+		setMainClassName("org.jboss.modules.Main");
+		Path jar = vdocHome.resolve("wildfly/jboss-modules.jar");
+		Path modulePath = vdocHome.resolve("wildfly/modules");
+		Path wildflyPath = vdocHome.resolve("wildfly");
 		
+		StringBuilder parameterBuilder = new StringBuilder();
+		parameterBuilder.append("-classpath \"");
+		parameterBuilder.append(jar.toString());
+		parameterBuilder.append("\" -server -Xmx");
+		parameterBuilder.append(xmx);
+		parameterBuilder.append(" -Xms");
+		parameterBuilder.append(xms);
+		parameterBuilder.append(" -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman");
+		if (useDCEVM != null && useDCEVM) {
+			parameterBuilder.append(" -XXaltjvm=dcevm");
+		}
+		setVMParameters(parameterBuilder.toString());
+		setProgramParameters("-mp \"" + modulePath.toString() + "\" org.jboss.as.standalone \"-Djboss.home.dir=" + wildflyPath.toString() + "\" -c standalone-process.xml -b 0.0.0.0");
+		setWorkingDirectory(vdocHome.toString());
+		Map<String, String> envs = this.getEnvs();
+		envs.put("JBOSS_HOME", wildflyPath.toString());
+		setEnvs(envs);
+		return super.getState(executor, env);
 	}
 	
 	/**
@@ -114,6 +113,18 @@ public class Process16RunConfiguration extends AbstractRunConfiguration implemen
 		if (home != null && StringUtils.isNotEmpty(home.getText())) {
 			this.vdocHome = Paths.get(home.getText());
 		}
+		Element xmx = element.getChild("xmx");
+		if (xmx != null && StringUtils.isNotEmpty(xmx.getText())) {
+			this.xmx = xmx.getText();
+		}
+		Element xms = element.getChild("xms");
+		if (xms != null && StringUtils.isNotEmpty(xms.getText())) {
+			this.xms = xms.getText();
+		}
+		Element useDCEVM = element.getChild("useDCEVM");
+		if (useDCEVM != null && StringUtils.isNotEmpty(useDCEVM.getText())) {
+			this.useDCEVM = Boolean.parseBoolean(useDCEVM.getText());
+		}
 	}
 	
 	@Override
@@ -123,6 +134,21 @@ public class Process16RunConfiguration extends AbstractRunConfiguration implemen
 			Element home = new Element("vdocHome");
 			home.setText(this.vdocHome.toString());
 			element.addContent(home);
+		}
+		if (this.xmx != null) {
+			Element xmx = new Element("xmx");
+			xmx.setText(this.xmx);
+			element.addContent(xmx);
+		}
+		if (this.xms != null) {
+			Element xms = new Element("xms");
+			xms.setText(this.xms);
+			element.addContent(xms);
+		}
+		if (this.useDCEVM != null) {
+			Element useDCEVM = new Element("useDCEVM");
+			useDCEVM.setText(this.useDCEVM.toString());
+			element.addContent(useDCEVM);
 		}
 	}
 	
@@ -144,8 +170,58 @@ public class Process16RunConfiguration extends AbstractRunConfiguration implemen
 		this.vdocHome = vdocHome;
 	}
 	
-	@Override
-	public Collection<Module> getValidModules() {
-		return this.getAllModules();
+	/**
+	 * get {@link Process16RunConfiguration#xmx} property
+	 *
+	 * @return get the xmx property
+	 **/
+	public String getXmx() {
+		return xmx;
+	}
+	
+	/**
+	 * set {@link Process16RunConfiguration#xmx} property
+	 *
+	 * @param xmx set the xmx property
+	 **/
+	public void setXmx(String xmx) {
+		this.xmx = xmx;
+	}
+	
+	/**
+	 * get {@link Process16RunConfiguration#xms} property
+	 *
+	 * @return get the xms property
+	 **/
+	public String getXms() {
+		return xms;
+	}
+	
+	/**
+	 * set {@link Process16RunConfiguration#xms} property
+	 *
+	 * @param xms set the xms property
+	 **/
+	public void setXms(String xms) {
+		this.xms = xms;
+	}
+	
+	/**
+	 * get {@link Process16RunConfiguration#useDCEVM} property
+	 *
+	 * @return get the useDCEVM property
+	 **/
+	public Boolean isUseDCEVM() {
+		return useDCEVM;
+	}
+	
+	/**
+	 * set {@link Process16RunConfiguration#useDCEVM} property
+	 *
+	 * @param useDCEVM set the useDCEVM property
+	 **/
+	public Process16RunConfiguration setUseDCEVM(Boolean useDCEVM) {
+		this.useDCEVM = useDCEVM;
+		return this;
 	}
 }
