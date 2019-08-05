@@ -28,4 +28,4 @@ patchPluginXml {
 }
 
 group 'com.vdoc.intellij'
-version '1.5.1' // Plugin version
+version '1.6.0-SNAPSHOT' // Plugin version
