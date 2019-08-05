@@ -12,7 +12,7 @@
     ]]></description>
 
   <change-notes>
-    - Add a run configuration to run config/applyconfig
+    - Add a run configuration to run moovapps process 16+ (wildfly)
   </change-notes>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
