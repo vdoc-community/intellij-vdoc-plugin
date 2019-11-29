@@ -13,7 +13,7 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
 intellij {
-    version '2019.2' //IntelliJ IDEA 2016.3 dependency; for a full list of IntelliJ IDEA releases please see https://www.jetbrains.com/intellij-repository/releases
+    version '2019.3' //IntelliJ IDEA 2016.3 dependency; for a full list of IntelliJ IDEA releases please see https://www.jetbrains.com/intellij-repository/releases
     pluginName 'VDoc intellij tools'
 }
 
@@ -28,4 +28,4 @@ patchPluginXml {
 }
 
 group 'com.vdoc.intellij'
-version '1.6.0-SNAPSHOT' // Plugin version
+version '1.5.2' // Plugin version
