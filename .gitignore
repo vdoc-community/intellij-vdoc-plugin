@@ -35,3 +35,9 @@ Supprimerait out/production/intellij-vdoc-plugin/generated/
 
 intellij-vdoc-plugin.jar
 gradle.properties
+
+.gradle/
+build/
+gradle/wrapper
+gradlew.bat
+gradlew
