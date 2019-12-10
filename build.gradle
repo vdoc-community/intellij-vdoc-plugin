@@ -1,20 +1,16 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-}
-
 plugins {
-    id "org.jetbrains.intellij" version "0.4.8"
+    id "java"
+    id "org.jetbrains.intellij" version "0.4.14"
 }
 
-apply plugin: 'idea'
-apply plugin: 'org.jetbrains.intellij'
-apply plugin: 'java'
+repositories {
+    mavenCentral()
+}
 
 intellij {
-    version '2019.2' //IntelliJ IDEA 2016.3 dependency; for a full list of IntelliJ IDEA releases please see https://www.jetbrains.com/intellij-repository/releases
+    version '2019.3' //IntelliJ IDEA 2016.3 dependency; for a full list of IntelliJ IDEA releases please see https://www.jetbrains.com/intellij-repository/releases
     pluginName 'VDoc intellij tools'
+    plugins 'java'
 }
 
 publishPlugin {
@@ -23,9 +19,15 @@ publishPlugin {
 }
 
 patchPluginXml {
-    sinceBuild '171.0'
+    sinceBuild '192.*'
     untilBuild '193.*'
+    version '1.5.2'
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
 group 'com.vdoc.intellij'
-version '1.6.0-SNAPSHOT' // Plugin version
+version '1.5.2' // Plugin version
+sourceCompatibility = 1.8

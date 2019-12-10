@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.vdoc.intellij</id>
   <name>VDoc intellij tools</name>
-  <version>1.6.0-SNAPSHOT</version>
+  <version>1.5.2</version>
   <vendor email="famaridon@visiativ.com" url="https://www.visiativ.com/">Visiativ</vendor>
   <depends>com.intellij.modules.lang</depends>
   <depends>com.intellij.modules.java</depends>
@@ -16,7 +16,7 @@
   </change-notes>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-  <idea-version since-build="171" until-build="192.*"/>
+  <idea-version since-build="193.*" until-build="193.*"/>
 
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
