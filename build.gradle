@@ -19,8 +19,9 @@ publishPlugin {
 }
 
 patchPluginXml {
+    // see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html
     sinceBuild '192.*'
-    untilBuild '193.*'
+    untilBuild '201.*'
     version '1.6.0-SNAPSHOT'
 }
 
