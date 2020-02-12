@@ -4,6 +4,7 @@ import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInsight.template.impl.TextExpression;
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplateExpressionSelector;
+import com.intellij.codeInsight.template.postfix.templates.PostfixTemplateProvider;
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplateWithExpressionSelector;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
@@ -11,6 +12,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.util.InheritanceUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by wtoscer on 03/08/2016.
@@ -33,18 +35,16 @@ public abstract class VDocPostfixTemplateWithExpressionSelector extends PostfixT
 						return InheritanceUtil.isInheritor(((PsiExpression)element).getType(), "java.lang.String");
 				}
 		};
-
-		protected VDocPostfixTemplateWithExpressionSelector(@NotNull String name, @NotNull String key, @NotNull String example, @NotNull PostfixTemplateExpressionSelector selector)
-		{
-				super(name, key, example, selector);
-		}
-
-		protected VDocPostfixTemplateWithExpressionSelector(@NotNull String name, @NotNull String example, @NotNull PostfixTemplateExpressionSelector selector)
-		{
-				super(name, example, selector);
-		}
-
-		/**
+	
+	protected VDocPostfixTemplateWithExpressionSelector(@Nullable String id, @NotNull String name, @NotNull String example, @NotNull PostfixTemplateExpressionSelector selector, @Nullable PostfixTemplateProvider provider) {
+		super(id, name, example, selector, provider);
+	}
+	
+	protected VDocPostfixTemplateWithExpressionSelector(@Nullable String id, @NotNull String name, @NotNull String key, @NotNull String example, @NotNull PostfixTemplateExpressionSelector selector, @Nullable PostfixTemplateProvider provider) {
+		super(id, name, key, example, selector, provider);
+	}
+	
+	/**
 		 * Create a new instance of a code template for the current postfix template.
 		 *
 		 * @param project        The current project
