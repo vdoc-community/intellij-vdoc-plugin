@@ -6,9 +6,8 @@ import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInsight.template.impl.MacroCallNode;
 import com.intellij.codeInsight.template.impl.TextExpression;
 import com.intellij.codeInsight.template.macro.ExpectedTypeMacro;
-import com.intellij.codeInsight.template.macro.SubtypesMacro;
 import com.intellij.codeInsight.template.macro.SuggestVariableNameMacro;
-import com.intellij.codeInsight.template.postfix.templates.PostfixTemplateExpressionSelector;
+import com.intellij.codeInsight.template.postfix.templates.PostfixTemplateProvider;
 import com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
@@ -22,24 +21,14 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ProtocolUriTemplate extends VDocPostfixTemplateWithExpressionSelector
 {
-		public ProtocolUriTemplate()
+		public ProtocolUriTemplate(PostfixTemplateProvider provider)
 		{
-				this("uri");
+				this("uri", provider);
 		}
 
-		public ProtocolUriTemplate(@NotNull String alias)
+		public ProtocolUriTemplate(@NotNull String alias, PostfixTemplateProvider provider)
 		{
-				super(alias, "get element by protocol uri", JavaPostfixTemplatesUtils.selectorAllExpressionsWithCurrentOffset(IS_STRING));
-		}
-
-		protected ProtocolUriTemplate(@NotNull String name, @NotNull String key, @NotNull String example, @NotNull PostfixTemplateExpressionSelector selector)
-		{
-				super(name, key, example, selector);
-		}
-
-		protected ProtocolUriTemplate(@NotNull String name, @NotNull String example, @NotNull PostfixTemplateExpressionSelector selector)
-		{
-				super(name, example, selector);
+				super(null, alias, "get element by protocol uri", JavaPostfixTemplatesUtils.selectorAllExpressionsWithCurrentOffset(IS_STRING), provider);
 		}
 
 		@Override

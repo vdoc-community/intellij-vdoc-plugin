@@ -3,7 +3,7 @@ package com.vdoc.intellij.postfix.completion.template;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateEditingAdapter;
 import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInsight.template.postfix.templates.PostfixTemplateExpressionSelector;
+import com.intellij.codeInsight.template.postfix.templates.PostfixTemplateProvider;
 import com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
@@ -16,25 +16,16 @@ import org.jetbrains.annotations.NotNull;
  */
 public class TransactionTemplate extends VDocPostfixTemplateWithExpressionSelector
 {
-		public TransactionTemplate()
+		public TransactionTemplate(PostfixTemplateProvider provider)
 		{
-				this("transaction");
+				this("transaction", provider);
 		}
 
-		public TransactionTemplate(@NotNull String alias)
+		public TransactionTemplate(@NotNull String alias, PostfixTemplateProvider provider)
 		{
-				super(alias, "manage transaction", JavaPostfixTemplatesUtils.selectorAllExpressionsWithCurrentOffset(IS_MODULE));
+				super(null, alias, "manage transaction", JavaPostfixTemplatesUtils.selectorAllExpressionsWithCurrentOffset(IS_MODULE), provider);
 		}
 
-		protected TransactionTemplate(@NotNull String name, @NotNull String key, @NotNull String example, @NotNull PostfixTemplateExpressionSelector selector)
-		{
-				super(name, key, example, selector);
-		}
-
-		protected TransactionTemplate(@NotNull String name, @NotNull String example, @NotNull PostfixTemplateExpressionSelector selector)
-		{
-				super(name, example, selector);
-		}
 
 		@Override
 		protected void expandForChooseExpression(@NotNull PsiElement expression, @NotNull Editor editor)

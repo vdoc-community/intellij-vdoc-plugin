@@ -18,7 +18,7 @@ public class VDocPostfixTemplateProvider extends JavaPostfixTemplateProvider {
 	private final Set<PostfixTemplate> templates;
 	
 	public VDocPostfixTemplateProvider() {
-		this.templates = ContainerUtil.newHashSet(new ProtocolUriTemplate(), new TransactionTemplate(), new IsEmptyCheckTemplate(), new IsNotEmptyCheckTemplate());
+		this.templates = ContainerUtil.newHashSet(new ProtocolUriTemplate(this), new TransactionTemplate(this), new IsEmptyCheckTemplate(), new IsNotEmptyCheckTemplate());
 	}
 	
 	@NotNull
