@@ -8,7 +8,7 @@ repositories {
 }
 
 intellij {
-    version '2020.1' //IntelliJ IDEA 2016.3 dependency; for a full list of IntelliJ IDEA releases please see https://www.jetbrains.com/intellij-repository/releases
+    version '2020.2' //IntelliJ IDEA 2016.3 dependency; for a full list of IntelliJ IDEA releases please see https://www.jetbrains.com/intellij-repository/releases
     pluginName 'VDoc intellij tools'
     plugins 'java'
 }
@@ -21,8 +21,8 @@ publishPlugin {
 patchPluginXml {
     // see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html
     sinceBuild '192.*'
-    untilBuild '201.*'
-    version '1.6.0'
+    untilBuild '202.*'
+    version '1.6.1'
 }
 
 dependencies {
